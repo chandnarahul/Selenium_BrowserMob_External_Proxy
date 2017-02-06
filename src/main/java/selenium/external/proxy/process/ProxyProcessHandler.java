@@ -12,8 +12,10 @@ public class ProxyProcessHandler {
     public void killProcess() throws Exception {
         destroy();
         if (isLinux()) {
+            System.out.println("stopping linux proxy");
             stopLinuxProcess();
         } else {
+            System.out.println("stopping windows proxy");
             stopWindowProcess();
         }
     }
@@ -39,27 +41,32 @@ public class ProxyProcessHandler {
     }
 
     private void stopWindowProcess() throws Exception {
-        if (isWinProcessRunning(GlobalProxyConfig.WIN_BROWSERMOB_PROXY_PROCESS)) {
-            killWinProcess(GlobalProxyConfig.WIN_BROWSERMOB_PROXY_PROCESS);
+        String winProcessPID = getWinProcess(GlobalProxyConfig.WIN_BROWSERMOB_PROXY_PROCESS);
+        if (!winProcessPID.isEmpty()) {
+            killWinProcess(winProcessPID);
+        } else {
+            System.out.println("windows [" + GlobalProxyConfig.WIN_BROWSERMOB_PROXY_PROCESS + "] process not found !");
         }
     }
 
-    private boolean isWinProcessRunning(String serviceName) throws Exception {
-        Process p = Runtime.getRuntime().exec("tasklist");
+    private String getWinProcess(String serviceName) throws Exception { 
+        Process p = Runtime.getRuntime().exec("jps -lv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
             if (line.contains(serviceName)) {
-                return true;
+                System.out.println("windows process found [" + line + "]");
+                System.out.println("process id is [" + line.split(" ")[0] + "]");
+                return line.split(" ")[0];
             }
         }
-        return false;
+        return "";
     }
 
-    private static void killWinProcess(String serviceName) throws Exception {
-        final String KILL = "taskkill /F /IM ";
-        Runtime.getRuntime().exec(KILL + serviceName);
+    private static void killWinProcess(String winProcessPID) throws Exception {
+        final String KILL = "taskkill /F /PID ";
+        Runtime.getRuntime().exec(KILL + winProcessPID);
     }
 
     private String getProxy() {
