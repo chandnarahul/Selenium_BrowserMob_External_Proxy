@@ -36,8 +36,8 @@ public class ExternalProxyHandlerTest {
         capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 
         driver = new ChromeDriver(capabilities);
-        driver.navigate().to("http://www.trainman.in");
         externalProxyHandler.startHar();
+        driver.navigate().to("http://www.trainman.in");
         Thread.sleep(5000);
         String har = externalProxyHandler.getHar();
         System.out.println(har);
