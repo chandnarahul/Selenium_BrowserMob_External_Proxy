@@ -36,10 +36,9 @@ public class ExternalProxyHandlerTest {
         capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 
         driver = new ChromeDriver(capabilities);
-        externalProxyHandler.startHar();
+        externalProxyHandler.resetHar();
         driver.navigate().to("http://www.trainman.in");
-        Thread.sleep(5000);
-        String har = externalProxyHandler.getHar();
+        String har = externalProxyHandler.getSubHar("request", "http://googleads.g.doubleclick.net/pagead/viewthroughconversion/959180864/?value=0&guid=ON&script=0", "response", "http://www.google.com/ads/user-lists/959180864");
         System.out.println(har);
         assertTrue(har.contains("959180864"));
     }

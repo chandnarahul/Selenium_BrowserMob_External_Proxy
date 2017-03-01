@@ -10,6 +10,7 @@ public class ExternalProxyHandler {
         System.out.println("starting external proxyURL");
         proxyProcessHandler.startProcess();
         proxyHandler.startProxy();
+        proxyHandler.startHar();
     }
 
     public void stop() throws Exception {
@@ -17,7 +18,7 @@ public class ExternalProxyHandler {
         proxyProcessHandler.killProcess();
     }
 
-    public void startHar() throws Exception {
+    public void resetHar() throws Exception {
         proxyHandler.startHar();
     }
 
@@ -25,5 +26,8 @@ public class ExternalProxyHandler {
         return proxyHandler.getAllHAR();
     }
 
+    public String getSubHar(String type, String... searchParams) throws Exception {
+        return proxyHandler.getSubHar(type, searchParams);
+    }
 
 }

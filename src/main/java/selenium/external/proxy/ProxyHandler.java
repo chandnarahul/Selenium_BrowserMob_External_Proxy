@@ -8,6 +8,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ProxyHandler {
+    private static final String CONTENT_TYPE = "application/x-www-form-urlencoded";
 
     public void startProxy() throws Exception {
         System.out.println(sendPost(GlobalProxyConfig.proxyInit()));
@@ -21,11 +22,29 @@ public class ProxyHandler {
         return sendGet(GlobalProxyConfig.harURL());
     }
 
+    public String getSubHar(String type, String... searchParams) throws Exception {
+        for (String data : getAllHAR().split(type)) {
+            int count = 0;
+            for (String search : searchParams) {
+                if (data.contains(search)) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+            if (count == searchParams.length) {
+                return data;
+            }
+        }
+        return "";
+    }
+
     private String sendPost(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("POST");
         con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", CONTENT_TYPE);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
         wr.writeBytes("port=" + GlobalProxyConfig.PROXY_RUNNING_PORT);
         wr.flush();
@@ -42,8 +61,9 @@ public class ProxyHandler {
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
         con.setRequestMethod("PUT");
         con.setDoOutput(true);
+        con.setRequestProperty("Content-Type", CONTENT_TYPE);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes("captureHeaders=true&captureContent=true&initialPageRef=foo");
+        wr.writeBytes("captureContent=true");
         wr.flush();
         wr.close();
 
