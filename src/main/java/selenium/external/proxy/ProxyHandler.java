@@ -11,6 +11,9 @@ public class ProxyHandler {
 
     public void startProxy() throws Exception {
         System.out.println(sendPost(GlobalProxyConfig.proxyInit()));
+    }
+
+    public void startHar() throws Exception {
         System.out.println(sendPut(GlobalProxyConfig.harURL()));
     }
 

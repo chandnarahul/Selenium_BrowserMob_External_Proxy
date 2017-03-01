@@ -17,6 +17,10 @@ public class ExternalProxyHandler {
         proxyProcessHandler.killProcess();
     }
 
+    public void startHar() throws Exception {
+        proxyHandler.startHar();
+    }
+
     public String getHar() throws Exception {
         return proxyHandler.getAllHAR();
     }

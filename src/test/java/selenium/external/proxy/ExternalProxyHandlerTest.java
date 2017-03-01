@@ -3,10 +3,8 @@ package selenium.external.proxy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -39,6 +37,7 @@ public class ExternalProxyHandlerTest {
 
         driver = new ChromeDriver(capabilities);
         driver.navigate().to("http://www.trainman.in");
+        externalProxyHandler.startHar();
         Thread.sleep(5000);
         String har = externalProxyHandler.getHar();
         System.out.println(har);
