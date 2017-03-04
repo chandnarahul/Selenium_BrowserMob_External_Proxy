@@ -6,21 +6,45 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class ProxyProcessHandler {
+public class ProxyProcessHandler implements Cloneable {
+    private static volatile boolean isProxyStarted = false;
+    private static final ProxyProcessHandler proxyProcessHandler = new ProxyProcessHandler();
+    private Object LOCK_OBJECT = new Object();
+
+    private ProxyProcessHandler() {
+
+    }
+
+    public static ProxyProcessHandler proxy() {
+        return proxyProcessHandler;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        throw new CloneNotSupportedException("only one proxy can run at a time.");
+    }
 
     public void killProcess() throws Exception {
-        if (isLinux()) {
-            System.out.println("stopping linux proxy");
-            stopLinuxProcess();
-        } else {
-            System.out.println("stopping windows proxy");
-            stopWindowProcess();
+        synchronized (LOCK_OBJECT) {
+            if (isLinux()) {
+                System.out.println("stopping linux proxy");
+                stopLinuxProcess();
+            } else {
+                System.out.println("stopping windows proxy");
+                stopWindowProcess();
+            }
+            isProxyStarted = false;
         }
     }
 
     public void startProcess() throws Exception {
-        startProxyServer();
-        addProxyServerShutDownHook();
+        synchronized (LOCK_OBJECT) {
+            if (!isProxyStarted) {
+                startProxyServer();
+                addProxyServerShutDownHook();
+                isProxyStarted = true;
+            }
+        }
         Thread.sleep(10000);
     }
 
@@ -87,4 +111,5 @@ public class ProxyProcessHandler {
     private boolean isLinux() {
         return System.getProperty("os.name").toLowerCase().contains("linux");
     }
+
 }
