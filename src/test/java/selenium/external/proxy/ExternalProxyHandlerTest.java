@@ -9,6 +9,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.File;
+
 import static org.junit.Assert.assertTrue;
 
 public class ExternalProxyHandlerTest {
@@ -37,10 +39,10 @@ public class ExternalProxyHandlerTest {
 
         driver = new ChromeDriver(capabilities);
         externalProxyHandler.resetHar();
-        driver.navigate().to("http://www.trainman.in");
-        String har = externalProxyHandler.getSubHar("request", "http://googleads.g.doubleclick.net/pagead/viewthroughconversion/959180864/?value=0&guid=ON&script=0", "response", "http://www.google.com/ads/user-lists/959180864");
-        System.out.println(har);
-        assertTrue(har.contains("959180864"));
+        driver.navigate().to("https://www.linkedin.com");
+        externalProxyHandler.writeHarToFIle("op_1.txt");
+        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://www.linkedin.com/lite/platformtelemetry", "response", "\\\"c\\\":\\\"");
+        assertTrue(new File("op_2.txt").exists());
     }
 
     @After
