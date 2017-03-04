@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class ProxyProcessHandler {
-    private Process process = null;
 
     public void killProcess() throws Exception {
-        destroy();
         if (isLinux()) {
             System.out.println("stopping linux proxy");
             stopLinuxProcess();
@@ -21,23 +19,36 @@ public class ProxyProcessHandler {
     }
 
     public void startProcess() throws Exception {
+        startProxyServer();
+        addProxyServerShutDownHook();
+        Thread.sleep(10000);
+    }
+
+    private void startProxyServer() throws IOException {
         ProcessBuilder pb = new ProcessBuilder(getProxy());
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-        process = pb.start();
-        Thread.sleep(10000);
+        pb.start();
+    }
+
+    private void addProxyServerShutDownHook() {
+        Thread stopProxyThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    killProcess();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        Runtime.getRuntime().addShutdownHook(stopProxyThread);
     }
 
     private void stopLinuxProcess() throws IOException, InterruptedException {
         String killCommand = "pkill -f java.*" + GlobalProxyConfig.LINUX_BROWSERMOB_PROXY_PROCESS;
         System.out.println(killCommand);
         Runtime.getRuntime().exec(new String[]{"bash", "-c", killCommand}).waitFor();
-    }
-
-    private void destroy() {
-        if (process != null) {
-            process.destroy();
-        }
     }
 
     private void stopWindowProcess() throws Exception {
@@ -49,7 +60,7 @@ public class ProxyProcessHandler {
         }
     }
 
-    private String getWinProcess(String serviceName) throws Exception { 
+    private String getWinProcess(String serviceName) throws Exception {
         Process p = Runtime.getRuntime().exec("jps -lv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
