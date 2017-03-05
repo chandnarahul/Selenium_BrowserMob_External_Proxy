@@ -29,15 +29,17 @@ public class ExternalProxyHandler {
     }
 
     public void writeHarToFIle(String fileName) throws Exception {
+        writeToFile(fileName, getHar());
+    }
+
+    private void writeToFile(String fileName, String har) throws Exception {
         PrintWriter out = new PrintWriter(fileName);
-        out.write(getHar());
+        out.write(har);
         out.close();
     }
 
     public void writeSubHarToFIle(String fileName, String type, String... searchParams) throws Exception {
-        PrintWriter out = new PrintWriter(fileName);
-        out.write(getSubHar(type, searchParams));
-        out.close();
+        writeToFile(fileName, getSubHar(type, searchParams));
     }
 
     public String getSubHar(String type, String... searchParams) throws Exception {
