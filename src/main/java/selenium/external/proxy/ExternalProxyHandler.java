@@ -9,14 +9,12 @@ public class ExternalProxyHandler {
     private ProxyHandler proxyHandler = new ProxyHandler();
 
     public void start() throws Exception {
-        System.out.println("starting external proxyURL");
         proxyProcessHandler.startProcess();
         proxyHandler.startProxy();
         proxyHandler.startHar();
     }
 
     public void stop() throws Exception {
-        System.out.println("destroying external proxyURL");
         proxyProcessHandler.killProcess();
     }
 
@@ -28,22 +26,22 @@ public class ExternalProxyHandler {
         return proxyHandler.getAllHAR();
     }
 
-    public void writeHarToFIle(String fileName) throws Exception {
-        writeToFile(fileName, getHar());
+    public String getSubHar(String type, String... searchParams) throws Exception {
+        return proxyHandler.getSubHar(type, searchParams);
     }
 
-    private void writeToFile(String fileName, String har) throws Exception {
-        PrintWriter out = new PrintWriter(fileName);
-        out.write(har);
-        out.close();
+    public void writeHarToFIle(String fileName) throws Exception {
+        writeToFile(fileName, getHar());
     }
 
     public void writeSubHarToFIle(String fileName, String type, String... searchParams) throws Exception {
         writeToFile(fileName, getSubHar(type, searchParams));
     }
 
-    public String getSubHar(String type, String... searchParams) throws Exception {
-        return proxyHandler.getSubHar(type, searchParams);
+    private void writeToFile(String fileName, String har) throws Exception {
+        PrintWriter out = new PrintWriter(fileName);
+        out.write(har);
+        out.close();
     }
 
 }
