@@ -7,7 +7,7 @@ public class ProxyHandler {
     }
 
     public void startHar() throws Exception {
-        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "PUT", "captureContent=true"));
+        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "PUT", "captureHeaders=true&captureContent=true"));
     }
 
     public String getAllHAR() throws Exception {
