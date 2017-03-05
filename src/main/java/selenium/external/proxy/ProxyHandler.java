@@ -1,9 +1,20 @@
 package selenium.external.proxy;
 
-public class ProxyHandler {
+import selenium.external.proxy.process.ProxyProcessHandler;
 
-    public void startProxy() throws Exception {
+import java.io.PrintWriter;
+
+public class ProxyHandler {
+    private static final ProxyProcessHandler proxyProcessHandler = ProxyProcessHandler.proxy();
+
+    public void start() throws Exception {
+        proxyProcessHandler.startProcess();
         System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.proxyInit(), "POST", "port=" + GlobalProxyConfig.PROXY_RUNNING_PORT));
+        startHar();
+    }
+
+    public void stop() throws Exception {
+        proxyProcessHandler.killProcess();
     }
 
     public void startHar() throws Exception {
@@ -16,19 +27,37 @@ public class ProxyHandler {
 
     public String getSubHar(String type, String... searchParams) throws Exception {
         for (String data : getAllHAR().split(type)) {
-            int count = 0;
-            for (String search : searchParams) {
-                if (data.contains(search)) {
-                    count++;
-                } else {
-                    break;
-                }
-            }
-            if (count == searchParams.length) {
+            if (paramMatch(data, searchParams) == searchParams.length) {
                 return data;
             }
         }
         return "";
+    }
+
+    public void harToFile(String fileName) throws Exception {
+        writeToFile(fileName, getAllHAR());
+    }
+
+    public void subHarToFile(String fileName, String type, String... searchParams) throws Exception {
+        writeToFile(fileName, getSubHar(type, searchParams));
+    }
+
+    private void writeToFile(String fileName, String har) throws Exception {
+        PrintWriter out = new PrintWriter(fileName);
+        out.write(har);
+        out.close();
+    }
+
+    private int paramMatch(String data, String[] searchParams) {
+        int count = 0;
+        for (String search : searchParams) {
+            if (data.contains(search)) {
+                count++;
+            } else {
+                break;
+            }
+        }
+        return count;
     }
 
 }

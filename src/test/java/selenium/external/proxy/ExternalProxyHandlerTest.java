@@ -32,8 +32,8 @@ public class ExternalProxyHandlerTest {
 
         driver.navigate().to(webSite);
 
-        externalProxyHandler.writeHarToFIle("op_1.txt");
-        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://analytics.twitter.com", "response", "partner_id");
+        externalProxyHandler.harToFile("op_1.txt");
+        externalProxyHandler.subHarToFile("op_2.txt", "request", "https://analytics.twitter.com", "response", "partner_id");
 
         assertTrue(new File("op_2.txt").exists());
     }
