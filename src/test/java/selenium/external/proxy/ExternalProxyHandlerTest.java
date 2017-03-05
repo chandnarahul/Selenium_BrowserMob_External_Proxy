@@ -16,12 +16,11 @@ import java.io.IOException;
 import static org.junit.Assert.assertTrue;
 
 public class ExternalProxyHandlerTest {
-    private ExternalProxyHandler externalProxyHandler = null;
+    private ExternalProxyHandler externalProxyHandler = new ExternalProxyHandler();
     private WebDriver driver;
 
     @Before
     public void setUp() throws Exception {
-        this.externalProxyHandler = new ExternalProxyHandler();
         this.externalProxyHandler.start();
         setUpDriver();
     }
