@@ -9,8 +9,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import java.io.File;
-
 import static org.junit.Assert.assertTrue;
 
 public class ExternalProxyHandlerTest {
@@ -33,10 +31,12 @@ public class ExternalProxyHandlerTest {
         driver.navigate().to(webSite);
 
         externalProxyHandler.harToFile("op_1.txt");
-        externalProxyHandler.subHarToFile("op_2.txt", "request", "https://analytics.twitter.com", "response", "partner_id");
+        String searchParam = "partner_id";
+        externalProxyHandler.subHarToFile("op_2.txt", "request", "analytics.twitter.com/tpm/p?_=", "response", searchParam);
 
-        assertTrue(new File("op_2.txt").exists());
+        assertTrue(externalProxyHandler.isSubHarContains("request", "analytics.twitter.com/tpm/p?_=", "response", searchParam));
     }
+
 
     private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
