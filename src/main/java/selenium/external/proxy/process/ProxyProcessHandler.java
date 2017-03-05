@@ -26,6 +26,7 @@ public class ProxyProcessHandler implements Cloneable {
 
     public void killProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
+            System.out.println("destroying external proxyURL");
             if (isLinux()) {
                 System.out.println("stopping linux proxy");
                 stopLinuxProcess();
@@ -39,6 +40,7 @@ public class ProxyProcessHandler implements Cloneable {
 
     public void startProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
+            System.out.println("starting external proxyURL");
             if (!isProxyStarted) {
                 startProxyServer();
                 addProxyServerShutDownHook();
