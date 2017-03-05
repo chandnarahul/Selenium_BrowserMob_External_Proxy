@@ -42,6 +42,10 @@ public class ProxyHandler {
         writeToFile(fileName, getSubHar(type, searchParams));
     }
 
+    public boolean isSubHarContains(String type, String... searchParams) throws Exception {
+        return !getSubHar(type, searchParams).isEmpty();
+    }
+
     private void writeToFile(String fileName, String har) throws Exception {
         PrintWriter out = new PrintWriter(fileName);
         out.write(har);
