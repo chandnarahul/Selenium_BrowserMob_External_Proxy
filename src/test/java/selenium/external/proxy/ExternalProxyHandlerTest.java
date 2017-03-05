@@ -28,10 +28,10 @@ public class ExternalProxyHandlerTest {
     public void should_load_proxy_bat() throws Exception {
         externalProxyHandler.resetHar();
 
-        driver.navigate().to("https://www.linkedin.com");
+        driver.navigate().to("https://www.twitter.com");
 
         externalProxyHandler.writeHarToFIle("op_1.txt");
-        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://www.linkedin.com/lite/platformtelemetry", "response", "\\\"c\\\":\\\"");
+        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://analytics.twitter.com", "response", "partner_id");
 
         assertTrue(new File("op_2.txt").exists());
     }
