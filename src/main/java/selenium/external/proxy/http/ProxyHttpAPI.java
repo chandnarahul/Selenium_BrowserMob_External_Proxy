@@ -1,4 +1,4 @@
-package selenium.external.proxy;
+package selenium.external.proxy.http;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;

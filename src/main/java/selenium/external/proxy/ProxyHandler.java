@@ -1,5 +1,6 @@
 package selenium.external.proxy;
 
+import selenium.external.proxy.http.ProxyHttpAPI;
 import selenium.external.proxy.process.ProxyProcessHandler;
 
 import java.io.PrintWriter;
@@ -22,7 +23,7 @@ public class ProxyHandler {
     }
 
     public String getAllHAR() throws Exception {
-        return ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "GET", "").data;
+        return ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "GET", "").data();
     }
 
     public String getSubHar(String type, String... searchParams) throws Exception {
