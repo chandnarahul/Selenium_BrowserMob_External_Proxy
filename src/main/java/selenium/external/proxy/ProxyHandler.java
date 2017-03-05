@@ -28,7 +28,7 @@ public class ProxyHandler {
 
     public String getSubHar(String type, String... searchParams) throws Exception {
         for (String data : getAllHAR().split(type)) {
-            if (paramMatch(data, searchParams) == searchParams.length) {
+            if (paramMatch(data, searchParams)) {
                 return data;
             }
         }
@@ -53,16 +53,13 @@ public class ProxyHandler {
         out.close();
     }
 
-    private int paramMatch(String data, String[] searchParams) {
-        int count = 0;
+    private boolean paramMatch(String data, String[] searchParams) {
         for (String search : searchParams) {
-            if (data.contains(search)) {
-                count++;
-            } else {
-                break;
+            if (!data.contains(search)) {
+                return false;
             }
         }
-        return count;
+        return true;
     }
 
 }
