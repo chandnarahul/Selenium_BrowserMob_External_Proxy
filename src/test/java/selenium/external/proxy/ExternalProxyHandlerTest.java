@@ -21,11 +21,22 @@ public class ExternalProxyHandlerTest {
     public void setUp() throws Exception {
         this.externalProxyHandler = new ExternalProxyHandler();
         this.externalProxyHandler.start();
+        setUpDriver();
     }
 
     @Test
     public void should_load_proxy_bat() throws Exception {
+        externalProxyHandler.resetHar();
 
+        driver.navigate().to("https://www.linkedin.com");
+
+        externalProxyHandler.writeHarToFIle("op_1.txt");
+        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://www.linkedin.com/lite/platformtelemetry", "response", "\\\"c\\\":\\\"");
+
+        assertTrue(new File("op_2.txt").exists());
+    }
+
+    private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
 
         DesiredCapabilities capabilities = DesiredCapabilities.chrome();
@@ -38,11 +49,6 @@ public class ExternalProxyHandlerTest {
         capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 
         driver = new ChromeDriver(capabilities);
-        externalProxyHandler.resetHar();
-        driver.navigate().to("https://www.linkedin.com");
-        externalProxyHandler.writeHarToFIle("op_1.txt");
-        externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://www.linkedin.com/lite/platformtelemetry", "response", "\\\"c\\\":\\\"");
-        assertTrue(new File("op_2.txt").exists());
     }
 
     @After
