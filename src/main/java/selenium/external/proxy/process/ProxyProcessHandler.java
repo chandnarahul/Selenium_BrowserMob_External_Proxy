@@ -44,8 +44,8 @@ public class ProxyProcessHandler implements Cloneable {
                 addProxyServerShutDownHook();
                 isProxyStarted = true;
             }
+            Thread.sleep(10000);
         }
-        Thread.sleep(10000);
     }
 
     private void startProxyServer() throws IOException {
