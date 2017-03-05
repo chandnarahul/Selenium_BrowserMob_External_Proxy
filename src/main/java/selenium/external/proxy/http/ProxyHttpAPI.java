@@ -16,9 +16,8 @@ public class ProxyHttpAPI {
     }
 
     private ProxyHttpAPIResponse apiResponse(String proxyURL, String methodType, String data) throws IOException {
-        URL url = new URL(proxyURL);
         System.out.println("\nSending '" + methodType + "' request to URL : " + proxyURL);
-        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+        HttpURLConnection httpURLConnection = (HttpURLConnection) new URL(proxyURL).openConnection();
         httpURLConnection.setRequestMethod(methodType);
         sendData(data, httpURLConnection);
         return apiHttpConnectionResponse(httpURLConnection);
