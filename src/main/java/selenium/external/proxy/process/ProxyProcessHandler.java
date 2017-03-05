@@ -26,12 +26,9 @@ public class ProxyProcessHandler implements Cloneable {
 
     public void killProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
-            System.out.println("destroying external proxyURL");
             if (isLinux()) {
-                System.out.println("stopping linux proxy");
                 stopLinuxProcess();
             } else {
-                System.out.println("stopping windows proxy");
                 stopWindowProcess();
             }
             isProxyStarted = false;
@@ -40,17 +37,17 @@ public class ProxyProcessHandler implements Cloneable {
 
     public void startProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
-            System.out.println("starting external proxyURL");
             if (!isProxyStarted) {
                 startProxyServer();
                 addProxyServerShutDownHook();
                 isProxyStarted = true;
+                Thread.sleep(10000);
             }
-            Thread.sleep(10000);
         }
     }
 
     private void startProxyServer() throws IOException {
+        System.out.println("starting external proxyURL");
         ProcessBuilder pb = new ProcessBuilder(getProxy());
         pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
         pb.redirectError(ProcessBuilder.Redirect.INHERIT);
@@ -72,12 +69,14 @@ public class ProxyProcessHandler implements Cloneable {
     }
 
     private void stopLinuxProcess() throws IOException, InterruptedException {
+        System.out.println("stopping linux proxy");
         String killCommand = "pkill -f java.*" + GlobalProxyConfig.LINUX_BROWSERMOB_PROXY_PROCESS;
         System.out.println(killCommand);
         Runtime.getRuntime().exec(new String[]{"bash", "-c", killCommand}).waitFor();
     }
 
     private void stopWindowProcess() throws Exception {
+        System.out.println("stopping windows proxy");
         String winProcessPID = getWinProcess(GlobalProxyConfig.WIN_BROWSERMOB_PROXY_PROCESS);
         if (!winProcessPID.isEmpty()) {
             killWinProcess(winProcessPID);
