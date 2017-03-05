@@ -17,11 +17,16 @@ public class ProxyHttpAPI {
 
     private ProxyHttpAPIResponse apiResponse(String proxyURL, String methodType, String data) throws IOException {
         URL url = new URL(proxyURL);
+        System.out.println("\nSending '" + methodType + "' request to URL : " + proxyURL);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
         httpURLConnection.setRequestMethod(methodType);
-        System.out.println("\nSending '" + methodType + "' request to URL : " + proxyURL);
+        sendData(data, httpURLConnection);
+        return apiHttpConnectionResponse(httpURLConnection);
+    }
+
+    private void sendData(String data, HttpURLConnection httpURLConnection) throws IOException {
+        final String CONTENT_TYPE = "application/x-www-form-urlencoded";
         if (data != null && !data.trim().isEmpty()) {
-            final String CONTENT_TYPE = "application/x-www-form-urlencoded";
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE);
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
@@ -29,7 +34,6 @@ public class ProxyHttpAPI {
             dataOutputStream.flush();
             dataOutputStream.close();
         }
-        return apiHttpConnectionResponse(httpURLConnection);
     }
 
     private ProxyHttpAPIResponse apiHttpConnectionResponse(HttpURLConnection con) throws IOException {
