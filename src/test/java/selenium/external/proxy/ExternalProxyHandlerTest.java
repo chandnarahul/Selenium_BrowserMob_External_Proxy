@@ -9,6 +9,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static org.junit.Assert.assertTrue;
 
 public class ExternalProxyHandlerTest {
@@ -35,8 +39,21 @@ public class ExternalProxyHandlerTest {
         externalProxyHandler.subHarToFile("op_2.txt", "request", "analytics.twitter.com/tpm/p?_=", "response", searchParam);
 
         assertTrue(externalProxyHandler.isSubHarContains("request", "analytics.twitter.com/tpm/p?_=", "response", searchParam));
+
+        assertTrue(isFileContains("op_2.txt", searchParam));
     }
 
+    private boolean isFileContains(String fileName, String check) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+        String sCurrentLine;
+
+        while ((sCurrentLine = bufferedReader.readLine()) != null) {
+            if (sCurrentLine.contains(check)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
