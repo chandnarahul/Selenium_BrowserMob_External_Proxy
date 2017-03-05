@@ -28,7 +28,9 @@ public class ExternalProxyHandlerTest {
     public void should_load_proxy_bat() throws Exception {
         externalProxyHandler.resetHar();
 
-        driver.navigate().to("https://www.twitter.com");
+        String webSite = "https://www.twitter.com";
+
+        driver.navigate().to(webSite);
 
         externalProxyHandler.writeHarToFIle("op_1.txt");
         externalProxyHandler.writeSubHarToFIle("op_2.txt", "request", "https://analytics.twitter.com", "response", "partner_id");
