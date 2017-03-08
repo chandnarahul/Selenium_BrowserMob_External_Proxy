@@ -25,14 +25,20 @@ public class ProxyHttpAPI {
 
     private void sendData(String data, HttpURLConnection httpURLConnection) throws IOException {
         final String CONTENT_TYPE = "application/x-www-form-urlencoded";
-        if (data != null && !data.trim().isEmpty()) {
+        if (isNotBlank(data)) {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE);
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
             dataOutputStream.writeBytes(data);
             dataOutputStream.flush();
             dataOutputStream.close();
+        } else {
+            System.out.println("No data params for [" + httpURLConnection.getRequestMethod() + "]");
         }
+    }
+
+    private boolean isNotBlank(String data) {
+        return data != null && !data.trim().isEmpty();
     }
 
     private ProxyHttpAPIResponse apiHttpConnectionResponse(HttpURLConnection con) throws IOException {
