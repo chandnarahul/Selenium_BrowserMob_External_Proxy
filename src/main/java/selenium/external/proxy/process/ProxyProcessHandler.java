@@ -1,6 +1,7 @@
 package selenium.external.proxy.process;
 
 import selenium.external.proxy.GlobalProxyConfig;
+import selenium.external.proxy.ProxyUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -89,7 +90,7 @@ public class ProxyProcessHandler implements Cloneable {
         Process p = Runtime.getRuntime().exec("jps -lv");
         BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line;
-        while ((line = reader.readLine()) != null) {
+        while (ProxyUtil.isNotBlank(line = reader.readLine())) {
             System.out.println(line);
             if (line.contains(serviceName)) {
                 System.out.println("windows process found [" + line + "]");

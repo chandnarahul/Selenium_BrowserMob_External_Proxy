@@ -1,5 +1,7 @@
 package selenium.external.proxy.http;
 
+import selenium.external.proxy.ProxyUtil;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,7 +27,7 @@ public class ProxyHttpAPI {
 
     private void sendData(String data, HttpURLConnection httpURLConnection) throws IOException {
         final String CONTENT_TYPE = "application/x-www-form-urlencoded";
-        if (isNotBlank(data)) {
+        if (ProxyUtil.isNotBlank(data)) {
             httpURLConnection.setDoOutput(true);
             httpURLConnection.setRequestProperty("Content-Type", CONTENT_TYPE);
             DataOutputStream dataOutputStream = new DataOutputStream(httpURLConnection.getOutputStream());
@@ -37,15 +39,11 @@ public class ProxyHttpAPI {
         }
     }
 
-    private boolean isNotBlank(String data) {
-        return data != null && !data.trim().isEmpty();
-    }
-
     private ProxyHttpAPIResponse apiHttpConnectionResponse(HttpURLConnection con) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
         StringBuilder data = new StringBuilder();
         String inputLine;
-        while ((inputLine = bufferedReader.readLine()) != null) {
+        while (ProxyUtil.isNotBlank(inputLine = bufferedReader.readLine())) {
             data.append(inputLine);
         }
         bufferedReader.close();
