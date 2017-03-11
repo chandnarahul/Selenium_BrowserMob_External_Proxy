@@ -41,9 +41,9 @@ public class ProxyProcessHandler implements Cloneable {
     public void startProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
             if (!isProxyStarted) {
-                startProxyServer();
-                addProxyServerShutDownHook();
                 isProxyStarted = true;
+                addProxyServerShutDownHook();
+                startProxyServer();
             }
         }
     }
