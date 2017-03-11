@@ -42,17 +42,31 @@ public class ProxyProcessHandler implements Cloneable {
                 startProxyServer();
                 addProxyServerShutDownHook();
                 isProxyStarted = true;
-                Thread.sleep(10000);
             }
         }
     }
 
     private void startProxyServer() throws IOException {
         System.out.println("starting external proxyURL");
-        ProcessBuilder pb = new ProcessBuilder(getProxy());
-        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-        pb.redirectError(ProcessBuilder.Redirect.INHERIT);
-        pb.start();
+        ProcessBuilder processBuilder = new ProcessBuilder(getProxy());
+        processBuilder.redirectError(ProcessBuilder.Redirect.INHERIT);
+        Process process = processBuilder.start();
+        holdTillProxyStarts(process);
+    }
+
+    private void holdTillProxyStarts(Process process) throws IOException {
+        String output = "";
+        BufferedReader bufferedReader = getOutput(process);
+        while (ProxyUtil.isNotBlank(output = bufferedReader.readLine())) {
+            System.out.println(output);
+            if (output.contains(GlobalProxyConfig.PROXY_STARTED_INDICATOR)) {
+                break;
+            }
+        }
+    }
+
+    private BufferedReader getOutput(Process process) {
+        return new BufferedReader(new InputStreamReader(process.getInputStream()));
     }
 
     private void addProxyServerShutDownHook() {
