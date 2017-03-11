@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 public class ProxyProcessHandler implements Cloneable {
     private static volatile boolean isProxyStarted = false;
     private static final ProxyProcessHandler proxyProcessHandler = new ProxyProcessHandler();
-    private Object LOCK_OBJECT = new Object();
+    private final Object LOCK_OBJECT = new Object();
 
     private ProxyProcessHandler() {
 
@@ -27,12 +27,14 @@ public class ProxyProcessHandler implements Cloneable {
 
     public void killProcess() throws Exception {
         synchronized (LOCK_OBJECT) {
-            if (isLinux()) {
-                stopLinuxProcess();
-            } else {
-                stopWindowProcess();
+            if (isProxyStarted) {
+                if (isLinux()) {
+                    stopLinuxProcess();
+                } else {
+                    stopWindowProcess();
+                }
+                isProxyStarted = false;
             }
-            isProxyStarted = false;
         }
     }
 
@@ -55,7 +57,7 @@ public class ProxyProcessHandler implements Cloneable {
     }
 
     private void holdTillProxyStarts(Process process) throws IOException {
-        String output = "";
+        String output;
         BufferedReader bufferedReader = getOutput(process);
         while (ProxyUtil.isNotBlank(output = bufferedReader.readLine())) {
             System.out.println(output);
