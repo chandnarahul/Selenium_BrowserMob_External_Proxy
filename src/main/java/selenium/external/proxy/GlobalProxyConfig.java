@@ -10,8 +10,9 @@ public class GlobalProxyConfig {
     private static final String PROXY_PORT = "8080";
     private static final String PROXY_INIT = "/proxy";
     public static final String PROXY_RUNNING_PORT = "8888";
-    public static final String CHROME_DRIVER_PATH="/home/rahulc/Downloads/chrome/chromedriver";
-    public static final String PROXY_PAGE_REFERENCE="SeleniumTest";
+    public static final String CHROME_DRIVER_PATH = "/home/rahulc/Downloads/chrome/chromedriver";
+    public static final String PROXY_PAGE_REFERENCE = "SeleniumTest";
+    public static final String PROXY_STARTED_INDICATOR = "Started SelectChannelConnector";
 
     public static String proxyInit() {
         return "http://" + PROXY_HOST + ":" + PROXY_PORT + PROXY_INIT;
