@@ -24,5 +24,12 @@ public class GlobalProxyConfig {
     public static final String PROXY_URL = PROXY_HOST + PROXY_RUNNING_PORT;
     public static final String PROXY_HAR = PROXY_INIT + "/" + PROXY_RUNNING_PORT + "/har";
 
-    public static final List<String> CHROME_OPTIONS = Arrays.asList("--proxy-server=" + PROXY_URL, "--disable-extensions", "-incognito");
+    public static final List<String> CHROME_OPTIONS = Arrays.asList(
+            "--proxy-server=" + PROXY_URL,
+            "--disable-extensions",
+            "--allow-insecure-localhost",
+            "--allow-running-insecure-content",
+            "--test-type",
+            "-incognito"
+    );
 }

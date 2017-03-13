@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.BufferedReader;
@@ -61,6 +62,7 @@ public class ExternalProxyHandlerTest {
         ChromeOptions chromeOptions = new ChromeOptions();
         chromeOptions.addArguments(GlobalProxyConfig.CHROME_OPTIONS);
 
+        capabilities.setCapability (CapabilityType.ACCEPT_SSL_CERTS, true);
         capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
 
         driver = new ChromeDriver(capabilities);
