@@ -54,8 +54,10 @@ public class ExternalProxyHandlerTest {
 
     private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
+
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--proxy-server=" + GlobalProxyConfig.proxyURL());
+        chromeOptions.addArguments(GlobalProxyConfig.chromeOptions());
+
         driver = new ChromeDriver(chromeOptions);
     }
 

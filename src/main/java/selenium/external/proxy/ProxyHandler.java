@@ -10,7 +10,7 @@ public class ProxyHandler {
 
     public void start() throws Exception {
         proxyProcessHandler.startProcess();
-        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.proxyInit(), "POST", "port=" + GlobalProxyConfig.PROXY_RUNNING_PORT));
+        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.PROXY_INIT, "POST", "port=" + GlobalProxyConfig.PROXY_RUNNING_PORT));
         startHar();
     }
 
@@ -19,11 +19,11 @@ public class ProxyHandler {
     }
 
     public void startHar() throws Exception {
-        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "PUT", "captureHeaders=true&captureContent=true"));
+        System.out.println(ProxyHttpAPI.response(GlobalProxyConfig.PROXY_HAR, "PUT", "captureHeaders=true&captureContent=true"));
     }
 
     public String getAllHAR() throws Exception {
-        return ProxyHttpAPI.response(GlobalProxyConfig.harURL(), "GET", "").data();
+        return ProxyHttpAPI.response(GlobalProxyConfig.PROXY_HAR, "GET", "").data();
     }
 
     public String getSubHar(String type, String... searchParams) throws Exception {
