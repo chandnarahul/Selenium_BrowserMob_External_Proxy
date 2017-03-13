@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -55,10 +56,14 @@ public class ExternalProxyHandlerTest {
     private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
 
+        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
+        
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments(GlobalProxyConfig.chromeOptions());
+        chromeOptions.addArguments(GlobalProxyConfig.CHROME_OPTIONS);
 
-        driver = new ChromeDriver(chromeOptions);
+        capabilities.setCapability(ChromeOptions.CAPABILITY, chromeOptions);
+
+        driver = new ChromeDriver(capabilities);
     }
 
     @After
