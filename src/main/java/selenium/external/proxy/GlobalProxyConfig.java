@@ -29,6 +29,7 @@ public class GlobalProxyConfig {
         List<String> list = new ArrayList<>();
         list.add("--proxy-server=" + PROXY_URL);
         list.add("--disable-extensions");
+        list.add("-incognito");
 
         return list;
     }
