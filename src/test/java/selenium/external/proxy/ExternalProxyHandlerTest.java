@@ -3,11 +3,9 @@ package selenium.external.proxy;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.CapabilityType;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -56,17 +54,9 @@ public class ExternalProxyHandlerTest {
 
     private void setUpDriver() throws Exception {
         System.setProperty("webdriver.chrome.driver", GlobalProxyConfig.CHROME_DRIVER_PATH);
-
-        DesiredCapabilities capabilities = DesiredCapabilities.chrome();
-
-        Proxy proxy = new Proxy();
-        proxy.setProxyType(Proxy.ProxyType.MANUAL);
-        proxy.setSslProxy(GlobalProxyConfig.proxyURL());
-        proxy.setHttpProxy(GlobalProxyConfig.proxyURL());
-        capabilities.setCapability(CapabilityType.PROXY, proxy);
-        capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
-
-        driver = new ChromeDriver(capabilities);
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--proxy-server=" + GlobalProxyConfig.proxyURL());
+        driver = new ChromeDriver(chromeOptions);
     }
 
     @After

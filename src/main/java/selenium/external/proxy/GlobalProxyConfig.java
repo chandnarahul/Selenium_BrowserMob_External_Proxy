@@ -19,7 +19,7 @@ public class GlobalProxyConfig {
     }
 
     public static String proxyURL() {
-        return PROXY_HOST + ":" + PROXY_RUNNING_PORT;
+        return "http://" + PROXY_HOST + ":" + PROXY_RUNNING_PORT;
     }
 
     public static String harURL() {
